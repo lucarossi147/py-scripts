@@ -45,6 +45,8 @@ def detect_events(filepath):
             sum_i= sum_i - raw[idx - 3] + raw[idx + 3]
         blurred_i = sum_i/7
         if status == NO_EVENT:
+            if blurred_i > m:
+                begin_of_event = idx
             if blurred_i < th:
                 count = 1
                 status = COUNTING
@@ -52,7 +54,6 @@ def detect_events(filepath):
             if blurred_i < th:
                 count += 1
                 if count >= min_samples:
-                    begin_of_event = idx
                     status = EVENT
             else:
                 status = NO_EVENT
