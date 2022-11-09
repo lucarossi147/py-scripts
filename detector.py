@@ -37,14 +37,17 @@ def detect_events(filepath):
     events = []
     begin_of_event = 0
     end_of_event = 0
-    idx = 0
-    for i in raw:
+    idx = 3
+    
+    for i in raw[3:-3]:
+        sum_i = np.sum(raw[idx-3:idx+4])
+        blurred_i = sum_i/7
         if status == NO_EVENT:
-            if i < th:
+            if blurred_i < th:
                 count = 1
                 status = COUNTING
         elif status == COUNTING:
-            if i < th:
+            if blurred_i < th:
                 count += 1
                 if count >= min_samples:
                     begin_of_event = idx
@@ -52,7 +55,7 @@ def detect_events(filepath):
             else:
                 status = NO_EVENT
         elif status == EVENT:
-            if i > m:
+            if blurred_i > m:
                 end_of_event = idx
                 events.append([begin_of_event, end_of_event])
                 status = NO_EVENT
