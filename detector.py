@@ -39,6 +39,7 @@ def detect_events(filepath):
     end_of_event = 0
     idx = 3
     sum_i = np.sum(raw[idx-3:idx+3])
+    print("analyzing")
     for i in raw[3:-3]:
         if idx > 3:
             sum_i= sum_i - raw[idx - 3] + raw[idx + 3]
@@ -61,7 +62,7 @@ def detect_events(filepath):
                 events.append([begin_of_event, end_of_event])
                 status = NO_EVENT
         idx += 1
-
+    print("done")
     extracted_events=np.array([])
     corrected_events = []
     for event in events:
@@ -73,6 +74,8 @@ def detect_events(filepath):
         extracted_events = np.concatenate((extracted_events, raw[start:end]), axis=None)
 
     results_folder = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","extracted events")
+    if not os.path.exists(results_folder):
+        os.mkdir(results_folder)
     f_name = filepath.split(os.sep).pop().removesuffix(".dat") 
     folder_name = results_folder+os.sep+f_name
     # print(folder_name)
