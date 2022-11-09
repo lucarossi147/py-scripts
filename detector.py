@@ -39,7 +39,7 @@ def detect_events(filepath):
     end_of_event = 0
     idx = 3
     
-    for i in raw[3:-3]:
+    for i in raw[3:-4]:
         sum_i = np.sum(raw[idx-3:idx+4])
         blurred_i = sum_i/7
         if status == NO_EVENT:
@@ -94,6 +94,6 @@ file_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","r
 f = open(file_of_files_to_check, "r")
 files = [r.removesuffix("\n") for r in f if r.split(os.sep).pop().startswith("N")]
 f.close()
-print(files)
+# print(files)
 with ThreadPoolExecutor() as executor:
     executor.map(detect_events, files)
