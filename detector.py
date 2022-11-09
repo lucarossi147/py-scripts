@@ -59,12 +59,13 @@ def detect_events(filepath):
         idx += 1
 
     extracted_events=np.array([])
-
+    corrected_events = []
     for event in events:
         start, end = event
         ev_range = end-start
         start = start - ev_range if start - ev_range > 0 else 0
         end = end + ev_range if end + ev_range < len(raw) - 1 else len(raw) - 1
+        corrected_events.append([start, end])
         extracted_events = np.concatenate((extracted_events, raw[start:end]), axis=None)
 
     results_folder = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","extracted events")
@@ -84,7 +85,7 @@ def detect_events(filepath):
         # write a row to the csv file
         writer.writerow(["Original file",filepath])
         writer.writerow(["Event begin index","Event end index"])
-        writer.writerows(event)
+        writer.writerows(corrected_events)
 
 file_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","results.txt")
 f = open(file_of_files_to_check, "r")
