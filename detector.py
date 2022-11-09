@@ -88,8 +88,8 @@ def detect_events(filepath):
 
 file_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","results.txt")
 f = open(file_of_files_to_check, "r")
-files = [r.removesuffix("\n") for r in f]
+files = [r.removesuffix("\n") for r in f if r.startswith("N")]
 f.close()
 print(files)
-# with ThreadPoolExecutor() as executor:
-#     executor.map()
+with ThreadPoolExecutor() as executor:
+    executor.map(detect_events, files)
