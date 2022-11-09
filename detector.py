@@ -38,15 +38,10 @@ def detect_events(filepath):
     begin_of_event = 0
     end_of_event = 0
     idx = 3
-    sum_i = np.sum(raw[idx-3:idx+4])
-    print(sum_i)
-    print(raw[idx-3:idx+4])
-    for i in raw[3:-4]:
+    sum_i = np.sum(raw[idx-3:idx+3])
+    for i in raw[3:-3]:
         if idx > 3:
-            sum_i= sum_i - raw[idx - 4] + raw[idx + 4]
-            if idx == 4:
-                print(sum_i)
-                print(raw[idx - 4] + raw[idx + 4])
+            sum_i= sum_i - raw[idx - 3] + raw[idx + 3]
         blurred_i = sum_i/7
         if status == NO_EVENT:
             if blurred_i < th:
