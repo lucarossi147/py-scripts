@@ -91,5 +91,5 @@ f = open(file_of_files_to_check, "r")
 files = [r.removesuffix("\n") for r in f]
 f.close()
 print(files)
-with ThreadPoolExecutor() as executor:
-    executor.map()
+# with ThreadPoolExecutor() as executor:
+#     executor.map()
