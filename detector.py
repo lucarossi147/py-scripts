@@ -39,9 +39,7 @@ def detect_events(filepath):
     end_of_event = 0
     b = [1/3, 1/3, 1/3]
     a = 1
-    idx = 3
     smoothed = signal.filtfilt(b,a, raw)
-    sum_i = np.sum(raw[idx-3:idx+3])
     print("analyzing")
     for blurred_i in smoothed:
         if status == NO_EVENT:
@@ -68,7 +66,7 @@ def detect_events(filepath):
     corrected_events = []
     for event in events:
         start, end = event
-        ev_range = end-start
+        ev_range = (end-start) * 2
         start = start - ev_range if start - ev_range > 0 else 0
         end = end + ev_range if end + ev_range < len(raw) - 1 else len(raw) - 1
         corrected_events.append([start, end])
