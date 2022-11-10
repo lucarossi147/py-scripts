@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import os
 import csv
 from concurrent.futures import ThreadPoolExecutor
-
+from scipy import signal
 def open_dat(filename):
     f = open(filename, "rb")
     f_cont = f.read()
@@ -37,13 +37,13 @@ def detect_events(filepath):
     events = []
     begin_of_event = 0
     end_of_event = 0
+    b = [1/3, 1/3, 1/3]
+    a = 1
     idx = 3
+    smoothed = signal.filtfilt(b,a, raw)
     sum_i = np.sum(raw[idx-3:idx+3])
     print("analyzing")
-    for i in raw[3:-3]:
-        if idx > 3:
-            sum_i= sum_i - raw[idx - 3] + raw[idx + 3]
-        blurred_i = sum_i/7
+    for blurred_i in smoothed:
         if status == NO_EVENT:
             if blurred_i > m:
                 begin_of_event = idx
