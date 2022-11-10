@@ -51,12 +51,13 @@ def detect_events(filepath):
         elif status == COUNTING:
             if blurred_i < th:
                 count += 1
-                end_of_event = idx
                 if count >= min_samples:
                     status = EVENT
             else:
                 status = NO_EVENT
         elif status == EVENT:
+            if blurred_i < th:
+                end_of_event = idx
             if blurred_i > m:
                 events.append([begin_of_event, end_of_event])
                 status = NO_EVENT
