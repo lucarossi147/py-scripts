@@ -43,21 +43,20 @@ def detect_events(filepath):
     print("analyzing")
     for blurred_i in smoothed:
         if status == NO_EVENT:
-            if blurred_i > m:
-                begin_of_event = idx
             if blurred_i < th:
+                begin_of_event = idx
                 count = 1
                 status = COUNTING
         elif status == COUNTING:
             if blurred_i < th:
                 count += 1
+                end_of_event = idx
                 if count >= min_samples:
                     status = EVENT
             else:
                 status = NO_EVENT
         elif status == EVENT:
             if blurred_i > m:
-                end_of_event = idx
                 events.append([begin_of_event, end_of_event])
                 status = NO_EVENT
         idx += 1
