@@ -40,6 +40,7 @@ def detect_events(filepath):
     b = [1/3, 1/3, 1/3]
     a = 1
     smoothed = signal.filtfilt(b,a, raw)
+    idx = 0
     print("analyzing")
     for blurred_i in smoothed:
         if status == NO_EVENT:
