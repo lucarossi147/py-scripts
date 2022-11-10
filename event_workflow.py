@@ -109,11 +109,11 @@ for event in event_folders:
 
 event_stereotype = event_stereotype / good_events_tot
 log_amplitudes = np.log(amplitudes)
-# print(np.mean(log_amplitudes), np.std(log_amplitudes))
+print(np.mean(log_amplitudes), np.std(log_amplitudes))
 log_d = np.log(d50s)
-# print(np.mean(log_d), np.std(log_d))
+print(np.mean(log_d), np.std(log_d))
 
-plt.plot(event_stereotype)
+# plt.plot(event_stereotype)
 # plt.loglog(amplitudes, d50s, 'o')
 # plt.hist(np.log(amplitudes))
-plt.show()
+# plt.show()
