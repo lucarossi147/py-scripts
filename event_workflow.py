@@ -43,7 +43,7 @@ def analyze(dir_name, event_stereotype_stored):
     good_events_n = 0
     event_avg = np.zeros(34)
 
-    if len([e for e in events_length if e >= 35]):
+    if len([e for e in events_length if e >= 35]) == 0:
         print("0 events", details_file)
         return event_avg, good_events_n
 
@@ -79,8 +79,8 @@ def analyze(dir_name, event_stereotype_stored):
         # divido per la deviazione standard calcolate in un'esecuzione precedente
         SA = (math.log(amplitude)+21.203848396517294)/0.29352449412890397
         SD = (math.log(d50)-3.8338243916010595)/0.6299649482174725
-
-        SF.append(math.sqrt(pow(SA,2)+pow(SD,2)))
+        sf = math.sqrt(pow(SA,2)+pow(SD,2))
+        SF.append(sf)
         # forma d'onda normalizzata:
         # in ampiezza dividendo per amplitude
         # in durata facendo la spline su un numero fisso di campioni
@@ -90,21 +90,28 @@ def analyze(dir_name, event_stereotype_stored):
         event_norm = f(x_norm)
         event_norm = event_norm[stereotype_length+3:2*stereotype_length+2]
         # SW.append(math.sqrt(np.sum(event_norm)))
-
+        sw = None
         if event_stereotype_stored is not None:
-            SW.append(math.sqrt(np.sum(np.power((event_norm-event_stereotype_stored),2))))
 
-        if SW[-1] < 2 and SF[-1] < 2.5:
+            sw = math.sqrt(np.sum(np.power((event_norm-event_stereotype_stored),2)))
+            SW.append(sw)
+            if sw < 2 and sf < 2.5:
+                amplitudes.append(amplitude)
+                d50s.append(d50)
+                event_avg += event_norm
+                good_events_n+=1
+                # plt.plot(event_norm)
+        else:
+            print("event_stereotype_stored is None")
             amplitudes.append(amplitude)
             d50s.append(d50)
             event_avg += event_norm
             good_events_n+=1
-            # plt.plot(event_norm)
-            if show_events_plots:
-                ax.plot(event_norm)
+        if show_events_plots:
+            ax.plot(event_norm)
 
-        if not ax.lines:
-            plt.close(fig=fig)
+    if show_plots and not ax.lines:
+        plt.close(fig=fig)
     return event_avg, good_events_n
 
     # event_avg = event_avg / good_events_n
