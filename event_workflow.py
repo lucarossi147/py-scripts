@@ -118,6 +118,7 @@ for event in event_folders:
     event_stereotype += event_avg
     good_events_tot += good_events_n
 
+print("good events are", good_events_tot)
 
 event_stereotype = event_stereotype / good_events_tot
 np.savetxt(event_stereotype_file_path, event_stereotype)
