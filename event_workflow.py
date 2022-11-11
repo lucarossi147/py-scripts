@@ -100,7 +100,9 @@ def analyze(dir_name, event_stereotype_stored):
 
     # event_avg = event_avg / good_events_n
 
-event_stereotype_file_path = '/home/luca/py-scripts/event_stereotype_stored'
+# event_stereotype_file_path = '/home/luca/py-scripts/event_stereotype_stored'
+event_stereotype_file_path =  os.path.join("C:\\","Users", "Luca Rossi", "Desktop","py-scripts", "event_stereotype_stored")
+
 good_events_tot = 0
 event_stereotype = np.zeros(34)
 SF = []
