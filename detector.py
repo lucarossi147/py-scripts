@@ -94,10 +94,26 @@ def detect_events(filepath):
         writer.writerow(["Event begin index","Event end index"])
         writer.writerows(corrected_events)
 
-file_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","results.txt")
-f = open(file_of_files_to_check, "r")
-files = [r.removesuffix("\n") for r in f if r.split(os.sep).pop().startswith("N")]
-f.close()
-# print(files)
+def detect_only_on_results():
+    file_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","results.txt")
+    f = open(file_of_files_to_check, "r")
+    files = [r.removesuffix("\n") for r in f if r.split(os.sep).pop().startswith("N")]
+    f.close()
+    return files    
+
+def detect_from_all_files():
+    file_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","dataset_tirocinio")
+    filenames = []
+    for root, dirs, files in os.walk(path_to_dir):
+        for filename in files:
+            if filename.endswith(".dat") and not filename.endswith("MonitorFile.dat"):
+                filenames.append(os.path.join(root, filename))
+
+    return [r for r in filenames if r.split(os.sep).pop().startswith("N")]
+
+
+files = detect_from_all_files()
+# files = detect_only_on_results()
+
 with ThreadPoolExecutor() as executor:
     executor.map(detect_events, files)
