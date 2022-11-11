@@ -42,13 +42,18 @@ def analyze(dir_name, event_stereotype_stored):
 
     good_events_n = 0
     event_avg = np.zeros(34)
+
+    if len([e for e in events_length if e >= 35]):
+        print("0 events", details_file)
+        return event_avg, good_events_n
+
     b = 0
     # ciclo sulle lunghezze degli eventi
     if show_events_plots:
         fig, ax = plt.subplots()
     for ev_len in events_length:
         # scarto eventi troppo brevi
-        if ev_len < 30:
+        if ev_len < 35:
             continue
         e = b + ev_len
         event = events[b:e]
@@ -64,7 +69,9 @@ def analyze(dir_name, event_stereotype_stored):
         b50 = event_50[0]
         # istante in cui l'evento torna al di sotto del 50% dell'escursione
         e50 = event_50[-1]
-        d50 = e50 - b50  
+        d50 = e50 - b50
+        if d50 <=0:
+            continue
         # faccio il logaritmo di ampiezze e durate perchè gli istogrammi in
         # scala logaritmica sono più simmetrici
 
@@ -96,12 +103,14 @@ def analyze(dir_name, event_stereotype_stored):
             if show_events_plots:
                 ax.plot(event_norm)
 
+    if not ax.lines:
+        plt.close(fig=fig)
     return event_avg, good_events_n
 
     # event_avg = event_avg / good_events_n
 
-# event_stereotype_file_path = '/home/luca/py-scripts/event_stereotype_stored'
-event_stereotype_file_path =  os.path.join("C:\\","Users", "Luca Rossi", "Desktop","py-scripts", "event_stereotype_stored")
+event_stereotype_file_path = '/home/luca/py-scripts/event_stereotype_stored'
+# event_stereotype_file_path =  os.path.join("C:\\","Users", "Luca Rossi", "Desktop","py-scripts", "event_stereotype_stored")
 
 good_events_tot = 0
 event_stereotype = np.zeros(34)
@@ -110,7 +119,7 @@ SW = []
 amplitudes = []
 d50s = []
 root_folder = r"/home/luca/Desktop/extracted events"
-# root_folder = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","extracted events")
+# root_folder = os.path.join("C:\\","Users", "Luca Rossi", "Desktop", "extracted events")
 event_folders = [root_folder + os.sep + d for d in os.listdir(root_folder)]
 
 event_stereotype_stored = np.loadtxt(event_stereotype_file_path) if os.path.exists(event_stereotype_file_path) else None
@@ -131,12 +140,13 @@ print(np.mean(log_d), np.std(log_d))
 if show_plots:
     fig, ax = plt.subplots()
     ax.plot(event_stereotype) 
+    ax.plot(event_stereotype_stored, "--") 
     fig, ax = plt.subplots()
     ax.loglog(amplitudes, d50s, 'o')
     fig, ax = plt.subplots()
-    ax.hist(SF)
+    ax.hist(SF, 30)
     ax.set_title("SF")
     fig, ax = plt.subplots()
     ax.set_title("SW")
-    ax.hist(SW)
+    ax.hist(SW, 30)
     plt.show()

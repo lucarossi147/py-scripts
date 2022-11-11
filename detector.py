@@ -95,16 +95,16 @@ def detect_events(filepath):
         writer.writerows(corrected_events)
 
 def detect_only_on_results():
-    file_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","results.txt")
+    path_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","results.txt")
     f = open(file_of_files_to_check, "r")
     files = [r.removesuffix("\n") for r in f if r.split(os.sep).pop().startswith("N")]
     f.close()
     return files    
 
 def detect_from_all_files():
-    file_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","dataset_tirocinio")
+    path_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","ml_data", "Cultured corona virus_I-t data")
     filenames = []
-    for root, dirs, files in os.walk(path_to_dir):
+    for root, dirs, files in os.walk(file_of_files_to_check):
         for filename in files:
             if filename.endswith(".dat") and not filename.endswith("MonitorFile.dat"):
                 filenames.append(os.path.join(root, filename))
