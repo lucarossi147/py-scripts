@@ -103,8 +103,8 @@ def analyze(dir_name, event_stereotype_stored):
             if show_events_plots:
                 ax.plot(event_norm)
 
-    if not ax.lines:
-        plt.close(fig=fig)
+        if not ax.lines:
+            plt.close(fig=fig)
     return event_avg, good_events_n
 
     # event_avg = event_avg / good_events_n
