@@ -76,6 +76,8 @@ def detect_events(filepath, file_number):
     print("done")
     extracted_events=np.array([])
     corrected_events = []
+    if len(events) == 0:
+        return
     for event in events:
         start, end = event
         ev_range = (end-start) * 2
