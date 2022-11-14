@@ -7,6 +7,13 @@ from concurrent.futures import ThreadPoolExecutor
 from scipy import signal
 
 folder_name = "HCOV-229E"
+results_folder = os.path.join("C:\\","Users", "Luca Rossi", "Desktop", folder_name)
+if not os.path.exists(results_folder):
+    print("Creating resutls folder")
+    os.mkdir(results_folder)
+else:
+    print("Folder already exists")
+
 def open_dat(filename):
     f = open(filename, "rb")
     f_cont = f.read()
@@ -77,9 +84,7 @@ def detect_events(filepath, file_number):
         corrected_events.append([start, end])
         extracted_events = np.concatenate((extracted_events, raw[start:end]), axis=None)
 
-    results_folder = os.path.join("C:\\","Users", "Luca Rossi", "Desktop", folder_name)
-    if not os.path.exists(results_folder):
-        os.mkdir(results_folder)
+
     f_name = filepath.split(os.sep).pop().removesuffix(".dat") 
     folder_name = results_folder+os.sep+f_name
     # print(folder_name)
