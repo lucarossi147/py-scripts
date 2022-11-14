@@ -22,7 +22,9 @@ def open_dat(filename):
 #rng = 10e-9
 #res = 2 * rng /65536
 
-def detect_events(filepath):
+def detect_events(filepath, file_number):
+    if file_number is not None:
+        print("File number: " + str(file_number))
     raw = open_dat(filename=filepath)
     
     m = np.mean(raw)
@@ -118,5 +120,7 @@ def detect_from_all_files():
 files = detect_from_all_files()
 # files = detect_only_on_results()
 
-with ThreadPoolExecutor() as executor:
-    executor.map(detect_events, files)
+file_numbers = [n for n in range(len(files))]
+
+with ThreadPoolExecutor(max_workers=2) as executor:
+    executor.map(detect_events, files, file_numbers)
