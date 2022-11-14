@@ -5,6 +5,8 @@ import os
 import csv
 from concurrent.futures import ThreadPoolExecutor
 from scipy import signal
+
+folder_name = "HCOV-229E"
 def open_dat(filename):
     f = open(filename, "rb")
     f_cont = f.read()
@@ -73,7 +75,7 @@ def detect_events(filepath):
         corrected_events.append([start, end])
         extracted_events = np.concatenate((extracted_events, raw[start:end]), axis=None)
 
-    results_folder = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","extracted events")
+    results_folder = os.path.join("C:\\","Users", "Luca Rossi", "Desktop", folder_name)
     if not os.path.exists(results_folder):
         os.mkdir(results_folder)
     f_name = filepath.split(os.sep).pop().removesuffix(".dat") 
@@ -96,7 +98,7 @@ def detect_events(filepath):
 
 def detect_only_on_results():
     path_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","results.txt")
-    f = open(file_of_files_to_check, "r")
+    f = open(path_of_files_to_check, "r")
     files = [r.removesuffix("\n") for r in f if r.split(os.sep).pop().startswith("N")]
     f.close()
     return files    
@@ -104,7 +106,7 @@ def detect_only_on_results():
 def detect_from_all_files():
     path_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","ml_data", "Cultured corona virus_I-t data")
     filenames = []
-    for root, dirs, files in os.walk(file_of_files_to_check):
+    for root, dirs, files in os.walk(path_of_files_to_check):
         for filename in files:
             if filename.endswith(".dat") and not filename.endswith("MonitorFile.dat"):
                 filenames.append(os.path.join(root, filename))
