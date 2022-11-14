@@ -119,7 +119,7 @@ def detect_from_all_files():
 
 files = detect_from_all_files()
 # files = detect_only_on_results()
-
+print("Total number of files: " + str(len(files)))
 file_numbers = [n for n in range(len(files))]
 
 with ThreadPoolExecutor(max_workers=2) as executor:
