@@ -109,7 +109,8 @@ def detect_from_all_files():
             if filename.endswith(".dat") and not filename.endswith("MonitorFile.dat"):
                 filenames.append(os.path.join(root, filename))
 
-    return [r for r in filenames if r.split(os.sep).pop().startswith("N")]
+    # return [r for r in filenames if r.split(os.sep).pop().startswith("N")]
+    return filenames
 
 
 files = detect_from_all_files()

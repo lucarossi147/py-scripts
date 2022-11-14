@@ -6,8 +6,8 @@ import math
 from scipy.interpolate import CubicSpline
 import matplotlib.pyplot as plt
 
-show_plots = False
-show_events_plots = False
+show_plots = True
+show_events_plots = True
 
 def open_dat(filename):
     f = open(filename, "rb")
@@ -51,6 +51,7 @@ def analyze(dir_name, event_stereotype_stored):
     # ciclo sulle lunghezze degli eventi
     if show_events_plots:
         fig, ax = plt.subplots()
+        ax.set_title(dir_name)
     for ev_len in events_length:
         # scarto eventi troppo brevi
         if ev_len < 35:
@@ -77,8 +78,8 @@ def analyze(dir_name, event_stereotype_stored):
 
         # inoltre faccio un whitening semplificato: sottraggo la media e
         # divido per la deviazione standard calcolate in un'esecuzione precedente
-        SA = (math.log(amplitude)+21.203848396517294)/0.29352449412890397
-        SD = (math.log(d50)-3.8338243916010595)/0.6299649482174725
+        SA = (math.log(amplitude)+21.022215609487752)/0.34339022210642384
+        SD = (math.log(d50)-4.006996432058481)/0.5714710299263429
         sf = math.sqrt(pow(SA,2)+pow(SD,2))
         SF.append(sf)
         # forma d'onda normalizzata:
@@ -95,7 +96,7 @@ def analyze(dir_name, event_stereotype_stored):
 
             sw = math.sqrt(np.sum(np.power((event_norm-event_stereotype_stored),2)))
             SW.append(sw)
-            if sw < 2 and sf < 2.5:
+            if sw < 3 and sf < 3:
                 amplitudes.append(amplitude)
                 d50s.append(d50)
                 event_avg += event_norm
@@ -125,7 +126,7 @@ SF = []
 SW = []
 amplitudes = []
 d50s = []
-root_folder = r"/home/luca/Desktop/extracted events"
+root_folder = r"/home/luca/Desktop/SARS-CoV-2"
 # root_folder = os.path.join("C:\\","Users", "Luca Rossi", "Desktop", "extracted events")
 event_folders = [root_folder + os.sep + d for d in os.listdir(root_folder)]
 
