@@ -34,8 +34,12 @@ def detect_events(filepath, file_number):
         print("File number: " + str(file_number))
     raw = open_dat(filename=filepath)
     
-    m = np.mean(raw)
-    s = np.std(raw)
+    b = [1/3, 1/3, 1/3]
+    a = 1
+    smoothed = signal.filtfilt(b,a, raw)
+
+    m = np.mean(smoothed)
+    s = np.std(smoothed)
 
     th = m-3*s
     min_samples = 3
@@ -50,9 +54,7 @@ def detect_events(filepath, file_number):
     events = []
     begin_of_event = 0
     end_of_event = 0
-    b = [1/3, 1/3, 1/3]
-    a = 1
-    smoothed = signal.filtfilt(b,a, raw)
+    
     idx = 0
     print("analyzing")
     for blurred_i in smoothed:
