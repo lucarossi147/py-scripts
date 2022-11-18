@@ -137,4 +137,4 @@ for fta in folders_to_analyze:
     file_numbers = [n for n in range(len(files))]
     results_folder_list_to_pass = [results_folder for n in range(len(files))]
     with ThreadPoolExecutor(max_workers=2) as executor:
-        executor.map(detect_events, files, file_numbers, results_folder)
+        executor.map(detect_events, files, file_numbers, results_folder_list_to_pass)
