@@ -18,6 +18,10 @@ def detect_events(filepath, file_number, results_folder):
         print("File number: " + str(file_number))
     if results_folder is not None:
         print("Results will be saved in "+ results_folder)
+        if not os.path.exists(results_folder):
+            print("Creating folder")
+            os.mkdir(results_folder)
+
     raw = open_dat(filename=filepath)
     
     b = [1/3, 1/3, 1/3]
