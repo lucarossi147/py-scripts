@@ -6,14 +6,6 @@ import csv
 from concurrent.futures import ThreadPoolExecutor
 from scipy import signal
 
-folder_name = "HCOV-229E"
-results_folder = os.path.join("C:\\","Users", "Luca Rossi", "Desktop", folder_name)
-if not os.path.exists(results_folder):
-    print("Creating resutls folder")
-    os.mkdir(results_folder)
-else:
-    print("Folder already exists")
-
 def open_dat(filename):
     f = open(filename, "rb")
     f_cont = f.read()
@@ -21,7 +13,7 @@ def open_dat(filename):
     raw = struct.unpack("d" * (len(f_cont) // 8), f_cont)
     return np.array(raw)
 
-def detect_events(filepath, file_number):
+def detect_events(filepath, file_number, results_folder):
     if file_number is not None:
         print("File number: " + str(file_number))
     raw = open_dat(filename=filepath)
@@ -119,22 +111,27 @@ def detect_only_on_results():
     f.close()
     return files    
 
-def detect_from_all_files():
-    path_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","ml_data", "Cultured corona virus_I-t data")
+def detect_from_all_files(dir_name):
+    path_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","ml_data", "Cultured corona virus_I-t data", dir_name)
     filenames = []
     for root, dirs, files in os.walk(path_of_files_to_check):
         for filename in files:
             if filename.endswith(".dat") and not filename.endswith("MonitorFile.dat"):
                 filenames.append(os.path.join(root, filename))
-
-    # return [r for r in filenames if r.split(os.sep).pop().startswith("N")]
     return filenames
 
 
-files = detect_from_all_files()
-# files = detect_only_on_results()
-print("Total number of files: " + str(len(files)))
-file_numbers = [n for n in range(len(files))]
-
-with ThreadPoolExecutor(max_workers=2) as executor:
-    executor.map(detect_events, files, file_numbers)
+folders_to_analyze = ["HCoV-229E", "MERS-CoV", "SARS-CoV", "SARS-CoV-2"]
+for fta in folders_to_analyze:
+    results_folder = os.path.join("C:\\","Users", "Luca Rossi", "Desktop", fta)
+    if not os.path.exists(results_folder):
+        print("Creating resutls folder")
+        os.mkdir(results_folder)
+    else:
+        print("Folder already exists")
+    files = detect_from_all_files(fta)
+    # files = detect_only_on_results()
+    print("Total number of files: " + str(len(files)))
+    file_numbers = [n for n in range(len(files))]
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        executor.map(detect_events, files, file_numbers)
