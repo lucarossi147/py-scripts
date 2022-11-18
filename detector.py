@@ -127,24 +127,32 @@ def get_dat_files(dir_path):
     return filenames
 
 start = time.time()
+desktop_folder = os.path.join("C:\\","Users", "Luca Rossi", "Desktop")
 folders_to_analyze = ["HCoV-229E", "MERS-CoV", "SARS-CoV", "SARS-CoV-2"]
+results_folder = os.path.join(desktop_folder, "RESULTS")
+if not os.path.exists(results_folder):
+    os.mkdir(results_folder)
 for fta in folders_to_analyze:
-    results_folder = os.path.join("C:\\","Users", "Luca Rossi", "Desktop", fta)
+    results_folder = os.path.join(results_folder, fta)
     if not os.path.exists(results_folder):
         print("Creating resutls folder")
         os.mkdir(results_folder)
     else:
         print("Folder already exists")
-    
-    path_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","ml_data", "Cultured corona virus_I-t data", fta)
+    path_of_files_to_check = os.path.join(desktop_folder, "ml_data", "Cultured corona virus_I-t data", fta)
+    # all folders containing relevant files to check
     all_folders_inside = os.listdir(path_of_files_to_check)
-    results_folder_list_to_pass = [os.path.join(results_folder, f) for f in all_folders_inside]
     all_number_folders = [os.path.join(path_of_files_to_check, f) for f in all_folders_inside]
-    for specific_folder in all_number_folders:
-        files = get_dat_files(specific_folder)
+    for number_folder in all_folders_inside:
+        partial_result_folder = os.path.join(results_folder, number_folder)
+        specific_number_folder_to_check = os.path.join(path_of_files_to_check, number_folder)
+        if not os.path.exists(partial_result_folder):
+            os.mkdir(partial_result_folder) 
+        files = get_dat_files(specific_number_folder_to_check)
         # files = detect_only_on_results()
         print("Total number of files: " + str(len(files)))
         file_numbers = [n for n in range(len(files))]
+        results_folder_list_to_pass = [partial_result_folder for n in range(len(files))]
         with ThreadPoolExecutor(max_workers=2) as executor:
             executor.map(detect_events, files, file_numbers, results_folder_list_to_pass)
 print(time.time()-start)
