@@ -25,7 +25,7 @@ def detect_events(filepath, file_number, results_folder):
 
     raw = open_dat(filename=filepath)
     
-    b = [1/3, 1/3, 1/3]
+    b = [1/5, 1/5, 1/5, 1/5, 1/5]
     a = 1
     smoothed = signal.filtfilt(b,a, raw)
 
