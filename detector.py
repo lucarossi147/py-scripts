@@ -113,10 +113,9 @@ def detect_only_on_results():
     f.close()
     return files    
 
-def detect_from_all_files(dir_name):
-    path_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","ml_data", "Cultured corona virus_I-t data", dir_name)
+def get_dat_files(dir_path):
     filenames = []
-    for root, dirs, files in os.walk(path_of_files_to_check):
+    for root, dirs, files in os.walk(dir_path):
         for filename in files:
             if filename.endswith(".dat") and not filename.endswith("MonitorFile.dat"):
                 filenames.append(os.path.join(root, filename))
@@ -131,10 +130,14 @@ for fta in folders_to_analyze:
         os.mkdir(results_folder)
     else:
         print("Folder already exists")
-    files = detect_from_all_files(fta)
-    # files = detect_only_on_results()
-    print("Total number of files: " + str(len(files)))
+    
+    path_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","ml_data", "Cultured corona virus_I-t data", fta)
+    all_folders_inside = os.listdir(path_of_files_to_check)
+    results_folder_list_to_pass = [os.path.join(results_folder, f) for f in all_folders_inside]
+    for specific_folder in all_number_folders:
+        files = detect_from_all_files(specific_folder)
+        # files = detect_only_on_results()
+        print("Total number of files: " + str(len(files)))
     file_numbers = [n for n in range(len(files))]
-    results_folder_list_to_pass = [results_folder for n in range(len(files))]
     with ThreadPoolExecutor(max_workers=2) as executor:
         executor.map(detect_events, files, file_numbers, results_folder_list_to_pass)
