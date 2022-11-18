@@ -103,7 +103,7 @@ def detect_events(filepath, file_number, results_folder):
     details_path = folder_name+os.sep+"details.csv"
     with open(dat_path, 'wb') as your_dat_file:  
         your_dat_file.write(struct.pack('d'*len(extracted_events), *extracted_events))
-    with open(details_path, 'w') as f:
+    with open(details_path, 'w', newline="") as f:
         # create the csv writer
         writer = csv.writer(f)
         # write a row to the csv file
