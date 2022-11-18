@@ -44,7 +44,9 @@ def detect_events(filepath, file_number):
     EVENT = 2
     status = NO_EVENT
     count = 0
-
+    falling = 0
+    rising = 0
+    prev_value = 0
     events = []
     begin_of_event = 0
     end_of_event = 0
@@ -58,12 +60,23 @@ def detect_events(filepath, file_number):
             if blurred_i < th:
                 begin_of_event = idx
                 count = 1
+                # counting samples during falling edge
+                falling = 1
+                prev_value = blurred_i
                 status = COUNTING
         elif status == COUNTING:
             if blurred_i < th:
                 count += 1
+                if blurred_i < prev_value:
+                    falling += 1
+                else:
+                     rising += 1
+                prev_value = blurred_i
                 if count >= min_samples:
-                    status = EVENT
+                    if rising > falling:
+                        status = NO_EVENT
+                    else: 
+                        status = EVENT
             else:
                 status = NO_EVENT
         elif status == EVENT:
