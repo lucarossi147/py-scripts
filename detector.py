@@ -16,6 +16,8 @@ def open_dat(filename):
 def detect_events(filepath, file_number, results_folder):
     if file_number is not None:
         print("File number: " + str(file_number))
+    if results_folder is not None:
+        print("Results will be saved in "+ results_folder)
     raw = open_dat(filename=filepath)
     
     b = [1/3, 1/3, 1/3]
@@ -133,5 +135,6 @@ for fta in folders_to_analyze:
     # files = detect_only_on_results()
     print("Total number of files: " + str(len(files)))
     file_numbers = [n for n in range(len(files))]
+    results_folder_list_to_pass = [results_folder for n in range(len(files))]
     with ThreadPoolExecutor(max_workers=2) as executor:
-        executor.map(detect_events, files, file_numbers)
+        executor.map(detect_events, files, file_numbers, results_folder)
