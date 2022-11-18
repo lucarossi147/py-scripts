@@ -5,6 +5,7 @@ import os
 import csv
 from concurrent.futures import ThreadPoolExecutor
 from scipy import signal
+import time
 
 def open_dat(filename):
     f = open(filename, "rb")
@@ -125,7 +126,7 @@ def get_dat_files(dir_path):
                 filenames.append(os.path.join(root, filename))
     return filenames
 
-
+start = time.time()
 folders_to_analyze = ["HCoV-229E", "MERS-CoV", "SARS-CoV", "SARS-CoV-2"]
 for fta in folders_to_analyze:
     results_folder = os.path.join("C:\\","Users", "Luca Rossi", "Desktop", fta)
@@ -146,3 +147,4 @@ for fta in folders_to_analyze:
         file_numbers = [n for n in range(len(files))]
         with ThreadPoolExecutor(max_workers=2) as executor:
             executor.map(detect_events, files, file_numbers, results_folder_list_to_pass)
+print(time.time()-start)
