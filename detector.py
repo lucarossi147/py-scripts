@@ -21,14 +21,6 @@ def open_dat(filename):
     raw = struct.unpack("d" * (len(f_cont) // 8), f_cont)
     return np.array(raw)
 
-#filepath = "C:\\Users\\Luca Rossi\\Desktop\\buoni\\buoni buoni\\NK-2-1-SARSx10-2nd_006.dat"
-#sr = 250e3
-#dt = 1/sr
-#l = len(raw)
-#t = np.arange(0,l) * dt
-#rng = 10e-9
-#res = 2 * rng /65536
-
 def detect_events(filepath, file_number):
     if file_number is not None:
         print("File number: " + str(file_number))
