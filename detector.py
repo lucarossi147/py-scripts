@@ -134,10 +134,11 @@ for fta in folders_to_analyze:
     path_of_files_to_check = os.path.join("C:\\","Users", "Luca Rossi", "Desktop","ml_data", "Cultured corona virus_I-t data", fta)
     all_folders_inside = os.listdir(path_of_files_to_check)
     results_folder_list_to_pass = [os.path.join(results_folder, f) for f in all_folders_inside]
+    all_number_folders = [os.path.join(path_of_files_to_check, f) for f in all_folders_inside]
     for specific_folder in all_number_folders:
-        files = detect_from_all_files(specific_folder)
+        files = get_dat_files(specific_folder)
         # files = detect_only_on_results()
         print("Total number of files: " + str(len(files)))
-    file_numbers = [n for n in range(len(files))]
-    with ThreadPoolExecutor(max_workers=2) as executor:
-        executor.map(detect_events, files, file_numbers, results_folder_list_to_pass)
+        file_numbers = [n for n in range(len(files))]
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            executor.map(detect_events, files, file_numbers, results_folder_list_to_pass)
