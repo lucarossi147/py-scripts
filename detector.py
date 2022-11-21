@@ -143,4 +143,5 @@ for fta in folders_to_analyze:
         i = 0
         for f in files:
             detect_events(f, i, partial_result_folder)
+            i += 1
 print(time.time() - start)
