@@ -44,7 +44,7 @@ def detect_events(filepath, file_number, results_folder):
     end_of_event = 0
     
     idx = 0
-    print("analyzing")
+    print("analyzing file " + file_name.split(os.sep).pop)
     for blurred_i in smoothed:
         if status == NO_EVENT:
             if blurred_i < th:
