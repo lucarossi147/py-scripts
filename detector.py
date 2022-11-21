@@ -153,6 +153,9 @@ for fta in folders_to_analyze:
         # with ThreadPoolExecutor(max_workers=4) as executor:
         #     executor.map(detect_events, files, file_numbers, results_folder_list_to_pass)
 
-for t in tuples_to_analyze:
-    print(t)
+files = [t[0] for t in tuples_to_analyze]
+results = [t[1] for t in tuples_to_analyze]
+file_numbers = [i for i in range(len(tuples_to_analyze))]
+with ThreadPoolExecutor(max_workers=4) as executor:
+    executor.map(detect_events, files, file_numbers, results)
 print(time.time() - start_time)
