@@ -3,4 +3,5 @@
 event_stereotype_stored
 *.csv
 *.arf
-
+*.vscode/*
+*.idea/*
