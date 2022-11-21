@@ -128,7 +128,6 @@ for fta in folders_to_analyze:
     path_of_files_to_check = os.path.join(desktop_folder, "ml_data", "Cultured corona virus_I-t data", fta)
     # all folders containing relevant files to check
     all_folders_inside = os.listdir(path_of_files_to_check)
-    all_number_folders = [os.path.join(path_of_files_to_check, f) for f in all_folders_inside]
     for number_folder in all_folders_inside:
         partial_result_folder = os.path.join(results_folder, number_folder)
         specific_number_folder_to_check = os.path.join(path_of_files_to_check, number_folder)
