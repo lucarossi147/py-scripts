@@ -120,6 +120,7 @@ def get_dat_files(dir_path):
     return filenames
 
 
+tuples_to_analyze = []
 start_time = time.time()
 desktop_folder = os.path.join("C:\\", "Users", "Luca Rossi", "Desktop")
 folders_to_analyze = ["HCoV-229E", "MERS-CoV", "SARS-CoV", "SARS-CoV-2"]
@@ -142,10 +143,16 @@ for fta in folders_to_analyze:
         if not os.path.exists(partial_result_folder):
             os.mkdir(partial_result_folder)
         files = get_dat_files(specific_number_folder_to_check)
+        for file_to_analyze in files:
+            tuples_to_analyze.append((file_to_analyze, partial_result_folder))
+
         # files = detect_only_on_results()
-        print("Total number of files: " + str(len(files)))
-        file_numbers = [n for n in range(len(files))]
-        results_folder_list_to_pass = [partial_result_folder for n in range(len(files))]
-        with ThreadPoolExecutor(max_workers=4) as executor:
-            executor.map(detect_events, files, file_numbers, results_folder_list_to_pass)
+        # print("Total number of files: " + str(len(files)))
+        # file_numbers = [n for n in range(len(files))]
+        # results_folder_list_to_pass = [partial_result_folder for n in range(len(files))]
+        # with ThreadPoolExecutor(max_workers=4) as executor:
+        #     executor.map(detect_events, files, file_numbers, results_folder_list_to_pass)
+
+for t in tuples_to_analyze:
+    print(t)
 print(time.time() - start_time)
