@@ -2,7 +2,7 @@ from filesplit.split import Split
 import os
 
 MAX_FILE_LENGTH = 16777216 * 8
-root_dir = "/home/luca/Desktop/ciccia"
+root_dir = os.path.join("C:\\", "Users", "Luca Rossi", "Desktop", "ml_data_splitted")
 
 
 def recursive(path_to_dir_or_file):
