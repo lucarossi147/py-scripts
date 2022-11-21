@@ -129,11 +129,11 @@ def get_dat_files(dir_path):
 start = time.time()
 desktop_folder = os.path.join("C:\\","Users", "Luca Rossi", "Desktop")
 folders_to_analyze = ["HCoV-229E", "MERS-CoV", "SARS-CoV", "SARS-CoV-2"]
-results_folder = os.path.join(desktop_folder, "RESULTS")
+results_folder_base = os.path.join(desktop_folder, "RESULTS")
 if not os.path.exists(results_folder):
     os.mkdir(results_folder)
 for fta in folders_to_analyze:
-    results_folder = os.path.join(results_folder, fta)
+    results_folder = os.path.join(results_folder_base, fta)
     if not os.path.exists(results_folder):
         print("Creating resutls folder")
         os.mkdir(results_folder)
