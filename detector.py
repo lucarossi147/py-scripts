@@ -69,6 +69,7 @@ def detect_events(filepath, file_number, res_folder):
     print("done")
     extracted_events = np.array([])
     corrected_events = []
+    print("making stuff on events")
     if len(events) == 0:
         return
     for event in events:
@@ -78,17 +79,21 @@ def detect_events(filepath, file_number, res_folder):
         end = end + ev_range if end + ev_range < len(raw) - 1 else len(raw) - 1
         corrected_events.append([start, end])
         extracted_events = np.concatenate((extracted_events, raw[start:end]), axis=None)
+    print("end stuff on events")
 
     f_name = filepath.split(os.sep).pop().removesuffix(".dat")
+    print(f_name)
     folder_name = res_folder + os.sep + f_name
-    # print(folder_name)
+    print(folder_name)
     if not os.path.exists(folder_name):
         os.mkdir(folder_name)
     extracted_dat_name = f_name + ".dat"
     dat_path = folder_name + os.sep + extracted_dat_name
     details_path = folder_name + os.sep + "details.csv"
+    print("writing dat file" + extracted_dat_name)
     with open(dat_path, 'wb') as your_dat_file:
         your_dat_file.write(struct.pack('d' * len(extracted_events), *extracted_events))
+    print("writing details" + details_path)
     with open(details_path, 'w', newline="") as f:
         # create the csv writer
         writer = csv.writer(f)
