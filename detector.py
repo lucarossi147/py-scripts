@@ -132,12 +132,15 @@ for fta in folders_to_analyze:
         partial_result_folder = os.path.join(results_folder, number_folder)
         specific_number_folder_to_check = os.path.join(path_of_files_to_check, number_folder)
         if not os.path.exists(partial_result_folder):
-            os.mkdir(partial_result_folder) 
+            os.mkdir(partial_result_folder)
         files = get_dat_files(specific_number_folder_to_check)
         # files = detect_only_on_results()
         print("Total number of files: " + str(len(files)))
-        file_numbers = [n for n in range(len(files))]
-        results_folder_list_to_pass = [partial_result_folder for n in range(len(files))]
-        with ThreadPoolExecutor(max_workers=2) as executor:
-            executor.map(detect_events, files, file_numbers, results_folder_list_to_pass)
-print(time.time()-start)
+        # file_numbers = [n for n in range(len(files))]
+        # results_folder_list_to_pass = [partial_result_folder for n in range(len(files))]
+        # with ThreadPoolExecutor(max_workers=2) as executor:
+        #     executor.map(detect_events, files, file_numbers, results_folder_list_to_pass)
+        i = 0
+        for f in files:
+            detect_events(f, i, partial_result_folder)
+print(time.time() - start)
