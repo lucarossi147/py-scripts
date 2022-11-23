@@ -37,7 +37,7 @@ def extract_raw_for_direction(data, raws, destination):
             raw_1 = [r[1] for r in raws if r[0] == f1].pop()
             raw_0 = [r[1] for r in raws if r[0] == f0].pop()
             raw_direction_1 = np.concatenate((raw_direction_1, raw_1[sp1:], raw_0[:sp0]), axis=None)
-    # because this function runs two times i don't need to catch the other case
+    # because this function runs two times I don't need to catch the other case
     if len(data_with_direction_0) < len(data_with_direction_1):
         print("last section")
         _, raw = raws[-1]
@@ -76,6 +76,21 @@ def recursive(path_to_dir_or_file, destination):
         if len(raws) != len(files):
             print("NOT all files in settings", current_dir)
             # not all files are in the settings
+            if len(data) == 1:
+                print("only one line")
+                # the data only has one row
+                glued_raws = np.array([])
+                for _, raw in raws:
+                    np.concatenate((glued_raws, raw), axis=None)
+                f, sp, d = data[0]
+                dat_name, _ = raws[0]
+                dat_name.removesuffix(".dat")
+                dat_name += "_DIRECTION_" + str(d) + ".dat"
+                glued_dat_path = os.path.join(destination, dat_name)
+                with open(glued_dat_path, 'wb') as your_dat_file:
+                    your_dat_file.write(struct.pack('d' * len(glued_raws), *glued_raws))
+            else:
+                print("still to manage, " + current_dir)
         else:
             # all files are in settings
             print("all files in settings", current_dir)
