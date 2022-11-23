@@ -24,10 +24,8 @@ def extract_raw_for_direction(data, raws, destination):
     _, _, d0 = data[1]
     dat_name += "_DIRECTION_" + str(d1) + ".dat"
     raw_direction_1 = np.array([])
-    _, _, d1 = data[0]
-    _, _, d0 = data[1]
-    data_with_direction_1 = [d for d in data if d[2] == '1']
-    data_with_direction_0 = [d for d in data if d[2] == '0']
+    data_with_direction_1 = [d for d in data if d[2] == d1]
+    data_with_direction_0 = [d for d in data if d[2] == d0]
     for (f1, sp1, _), (f0, sp0, _) in zip(data_with_direction_1, data_with_direction_0):
         sp1 = int(sp1)
         sp0 = int(sp0)
