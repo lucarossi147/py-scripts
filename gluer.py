@@ -22,7 +22,7 @@ def extract_raw_for_direction(data, raws, destination):
     dat_name.removesuffix(".dat")
     _, _, d1 = data[0]
     _, _, d0 = data[1]
-    dat_name += "_DIRECTION_" + str(d1)
+    dat_name += "_DIRECTION_" + str(d1) + ".dat"
     raw_direction_1 = np.array([])
     _, _, d1 = data[0]
     _, _, d0 = data[1]
