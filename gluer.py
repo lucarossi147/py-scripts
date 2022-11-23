@@ -29,7 +29,7 @@ def extract_raw_for_direction(data, raws, destination):
     for (f1, sp1, _), (f0, sp0, _) in zip(data_with_direction_1, data_with_direction_0):
         sp1 = int(sp1)
         sp0 = int(sp0)
-        print(sp1, sp0)
+        # print(sp1, sp0)
         if f1 == f0:
             raw_1 = [r[1] for r in raws if r[0] == f1].pop()
             raw_direction_1 = np.concatenate((raw_direction_1, raw_1[sp1:sp0]), axis=None)
