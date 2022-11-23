@@ -2,6 +2,7 @@ import os
 import xml.etree.ElementTree as ET
 import struct
 import numpy as np
+import shutil
 
 
 root_dir = os.path.join("C:\\", "Users", "Luca Rossi", "Desktop", "ml_data")
@@ -100,11 +101,18 @@ def recursive(path_to_dir_or_file, destination):
         else:
             # all files are in settings
             print("all files in settings", current_dir)
+            if len(data) == 1:
+                # nothing to glue
+                f, sp, d = data[0]
+                dat_name, _ = raws[0]
+                dat_name.removesuffix(".dat")
+                dat_name += "_DIRECTION_" + str(d) + ".dat"
+                renamed_dat = os.path.join(destination, dat_name)
+                shutil.copy(dat_name, renamed_dat)
             print("first run")
             extract_raw_for_direction(data, raws, destination)
-            if len(data) > 1:
-                print("second run")
-                extract_raw_for_direction(data[1:], raws, destination)
+            print("second run")
+            extract_raw_for_direction(data[1:], raws, destination)
 
 
 recursive(root_dir, destination=dest)
