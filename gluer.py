@@ -29,6 +29,7 @@ def extract_raw_for_direction(data, raws, destination):
     for (f1, sp1, _), (f0, sp0, _) in zip(data_with_direction_1, data_with_direction_0):
         sp1 = int(sp1)
         sp0 = int(sp0)
+        print(sp1, sp0)
         if f1 == f0:
             raw_1 = [r[1] for r in raws if r[0] == f1].pop()
             raw_direction_1 = np.concatenate((raw_direction_1, raw_1[sp1:sp0]), axis=None)
@@ -41,6 +42,7 @@ def extract_raw_for_direction(data, raws, destination):
         print("last section")
         _, raw = raws[-1]
         _, last_idx, _ = data[-1]
+        print(last_idx)
         raw_direction_1 = np.concatenate((raw_direction_1, raw[last_idx:]), axis=None)
     glued_dat_path = os.path.join(destination, dat_name)
     with open(glued_dat_path, 'wb') as your_dat_file:
@@ -77,7 +79,9 @@ def recursive(path_to_dir_or_file, destination):
         else:
             # all files are in settings
             print("all files in settings", current_dir)
+            print("first run")
             extract_raw_for_direction(data, raws, destination)
+            print("second run")
             extract_raw_for_direction(data[1:], raws, destination)
 
 
