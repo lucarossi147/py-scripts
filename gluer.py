@@ -38,7 +38,7 @@ def extract_raw_for_direction(data, raws, destination):
             raw_0 = [r[1] for r in raws if r[0] == f0].pop()
             raw_direction_1 = np.concatenate((raw_direction_1, raw_1[sp1:], raw_0[:sp0]), axis=None)
     # because this function runs two times i don't need to catch the other case
-    if data_with_direction_0 < data_with_direction_1:
+    if len(data_with_direction_0) < len(data_with_direction_1):
         print("last section")
         _, raw = raws[-1]
         _, last_idx, _ = data[-1]
