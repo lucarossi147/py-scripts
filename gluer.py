@@ -20,7 +20,7 @@ def open_dat(filename):
 
 def extract_raw_for_direction(data, raws, destination):
     dat_name, _ = raws[0]
-    dat_name.removesuffix(".dat")
+    dat_name = dat_name.removesuffix(".dat")
     _, _, d1 = data[0]
     _, _, d0 = data[1]
     dat_name += "_DIRECTION_" + str(d1) + ".dat"
@@ -82,11 +82,10 @@ def recursive(path_to_dir_or_file, destination):
                 # the data only has one row
                 glued_raws = np.array([])
                 for _, raw in raws:
-                    np.concatenate((glued_raws, raw), axis=None)
+                    glued_raws = np.concatenate((glued_raws, raw), axis=None)
                 f, sp, d = data[0]
                 dat_name, _ = raws[0]
-                dat_name.removesuffix(".dat")
-                dat_name += "_DIRECTION_" + str(d) + ".dat"
+                dat_name += dat_name.removesuffix(".dat") + "_DIRECTION_" + str(d) + ".dat"
                 glued_dat_path = os.path.join(destination, dat_name)
                 with open(glued_dat_path, 'wb') as your_dat_file:
                     your_dat_file.write(struct.pack('d' * len(glued_raws), *glued_raws))
@@ -106,9 +105,7 @@ def recursive(path_to_dir_or_file, destination):
                 # nothing to glue
                 f, sp, d = data[0]
                 dat_name, _ = raws[0]
-                dat_name.removesuffix(".dat")
-                dat_name += "_DIRECTION_" + str(d) + ".dat"
-                renamed_dat = os.path.join(destination, dat_name)
+                renamed_dat = os.path.join(destination, dat_name.removesuffix(".dat") + "_DIRECTION_" + str(d) + ".dat")
                 shutil.copy(dat_name, renamed_dat)
             print("first run")
             extract_raw_for_direction(data, raws, destination)
