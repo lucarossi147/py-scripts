@@ -76,7 +76,7 @@ def recursive(path_to_dir_or_file, destination):
         if len(raws) != len(files):
             print("NOT all files in settings", current_dir)
             # not all files are in the settings
-            if len(data) == 1:
+            if len(data) == 1 and len(raws) > 0:
                 print("only one line")
                 # the data only has one row
                 glued_raws = np.array([])
@@ -90,7 +90,8 @@ def recursive(path_to_dir_or_file, destination):
                 with open(glued_dat_path, 'wb') as your_dat_file:
                     your_dat_file.write(struct.pack('d' * len(glued_raws), *glued_raws))
             else:
-                print("still to manage, " + current_dir)
+                print("Still to manage, " + current_dir)
+                print("Files in this dir are: ", files_or_dirs)
         else:
             # all files are in settings
             print("all files in settings", current_dir)
