@@ -18,7 +18,7 @@ def open_dat(filename):
 
 
 def extract_raw_for_direction(data, raws, destination):
-    dat_name, _ = raws[0].pop()
+    dat_name, _ = raws[0]
     dat_name.removesuffix(".dat")
     _, _, d1 = data[0]
     _, _, d0 = data[1]
