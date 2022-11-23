@@ -102,6 +102,7 @@ def recursive(path_to_dir_or_file, destination):
             # all files are in settings
             print("all files in settings", current_dir)
             if len(data) == 1:
+                print("File only needs to be copied")
                 # nothing to glue
                 f, sp, d = data[0]
                 dat_name, _ = raws[0]
