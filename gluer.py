@@ -92,13 +92,19 @@ def recursive(path_to_dir_or_file, destination):
             else:
                 print("Still to manage, " + current_dir)
                 print("Files in this dir are: ", files_or_dirs)
+                for f, sp, d in data:
+                    print(f, sp, d)
+                for fn, r in raws:
+                    print(fn)
+                print(len(raws), len(files))
         else:
             # all files are in settings
             print("all files in settings", current_dir)
             print("first run")
             extract_raw_for_direction(data, raws, destination)
-            print("second run")
-            extract_raw_for_direction(data[1:], raws, destination)
+            if len(data) > 1:
+                print("second run")
+                extract_raw_for_direction(data[1:], raws, destination)
 
 
 recursive(root_dir, destination=dest)
