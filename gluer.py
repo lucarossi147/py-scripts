@@ -44,11 +44,11 @@ def recursive(path_to_dir_or_file, destination):
                 sp1 = int(sp1)
                 sp0 = int(sp0)
                 if f1 == f0:
-                    raw_1 = [r for r in raws if r[0] == f1].pop()
+                    raw_1 = [r[1] for r in raws if r[0] == f1].pop()
                     raw_direction_1 = np.concatenate((raw_direction_1, raw_1[sp1:sp0]), axis=None)
                 else:
-                    raw_1 = [r for r in raws if r[0] == f1].pop()
-                    raw_0 = [r for r in raws if r[0] == f0].pop()
+                    raw_1 = [r[1] for r in raws if r[0] == f1].pop()
+                    raw_0 = [r[1] for r in raws if r[0] == f0].pop()
                     raw_direction_1 = np.concatenate((raw_direction_1, raw_1[sp1:], raw_0[:sp0]), axis=None)
             glued_dat_path = os.path.join(destination, 'glued.dat')
             with open(glued_dat_path, 'wb') as your_dat_file:
