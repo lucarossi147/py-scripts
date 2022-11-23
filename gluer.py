@@ -36,13 +36,16 @@ def extract_raw_for_direction(data, raws, destination):
             raw_1 = [r[1] for r in raws if r[0] == f1].pop()
             raw_0 = [r[1] for r in raws if r[0] == f0].pop()
             raw_direction_1 = np.concatenate((raw_direction_1, raw_1[sp1:], raw_0[:sp0]), axis=None)
-            glued_dat_path = os.path.join(destination, dat_name)
-            with open(glued_dat_path, 'wb') as your_dat_file:
-                your_dat_file.write(struct.pack('d' * len(raw_direction_1), *raw_direction_1))
+    # because this function runs two times i don't need to catch the other case
     if data_with_direction_0 < data_with_direction_1:
-        print("should read last part with dir 1")
-    else:
-        print("should read last part with dir 2")
+        print("last section")
+        _, raw = raws[-1]
+        _, last_idx, _ = data[-1]
+        raw_direction_1 = np.concatenate((raw_direction_1, raw[last_idx:]), axis=None)
+    glued_dat_path = os.path.join(destination, dat_name)
+    with open(glued_dat_path, 'wb') as your_dat_file:
+        your_dat_file.write(struct.pack('d' * len(raw_direction_1), *raw_direction_1))
+
 
 def recursive(path_to_dir_or_file, destination):
     current_dir = path_to_dir_or_file.split(os.sep).pop()
