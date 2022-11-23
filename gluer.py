@@ -17,6 +17,32 @@ def open_dat(filename):
     return np.array(raw)
 
 
+def extract_raw_for_direction(data, raws, destination):
+    dat_name, _ = raws[0].pop()
+    dat_name.removesuffix(".dat")
+    _, _, d1 = data[0]
+    _, _, d0 = data[1]
+    dat_name += "_DIRECTION_" + str(d1)
+    raw_direction_1 = np.array([])
+    _, _, d1 = data[0]
+    _, _, d0 = data[1]
+    data_with_direction_1 = [d for d in data if d[2] == '1']
+    data_with_direction_0 = [d for d in data if d[2] == '0']
+    for (f1, sp1, _), (f0, sp0, _) in zip(data_with_direction_1, data_with_direction_0):
+        sp1 = int(sp1)
+        sp0 = int(sp0)
+        if f1 == f0:
+            raw_1 = [r[1] for r in raws if r[0] == f1].pop()
+            raw_direction_1 = np.concatenate((raw_direction_1, raw_1[sp1:sp0]), axis=None)
+        else:
+            raw_1 = [r[1] for r in raws if r[0] == f1].pop()
+            raw_0 = [r[1] for r in raws if r[0] == f0].pop()
+            raw_direction_1 = np.concatenate((raw_direction_1, raw_1[sp1:], raw_0[:sp0]), axis=None)
+            glued_dat_path = os.path.join(destination, dat_name)
+            with open(glued_dat_path, 'wb') as your_dat_file:
+                your_dat_file.write(struct.pack('d' * len(raw_direction_1), *raw_direction_1))
+
+
 def recursive(path_to_dir_or_file, destination):
     current_dir = path_to_dir_or_file.split(os.sep).pop()
     destination = os.path.join(destination, current_dir)
@@ -27,6 +53,7 @@ def recursive(path_to_dir_or_file, destination):
     if len(settings_file) == 0:
         # Folder does NOT have settings.xml
         # this could be a folder of folders of a folder of files
+
         # call recursively this method on all sub_dirs
         [recursive(fod, destination) for fod in files_or_dirs if os.path.isdir(fod)]
     # Folder has settings.xml
@@ -43,26 +70,11 @@ def recursive(path_to_dir_or_file, destination):
         if len(raws) != len(files):
             print("NOT all files in settings", current_dir)
             # not all files are in the settings
-            pass
         else:
             # all files are in settings
             print("all files in settings", current_dir)
-            raw_direction_1 = np.array([])
-            data_with_direction_1 = [d for d in data if d[2] == '1']
-            data_with_direction_0 = [d for d in data if d[2] == '0']
-            for (f1, sp1, _), (f0, sp0, _) in zip(data_with_direction_1, data_with_direction_0):
-                sp1 = int(sp1)
-                sp0 = int(sp0)
-                if f1 == f0:
-                    raw_1 = [r[1] for r in raws if r[0] == f1].pop()
-                    raw_direction_1 = np.concatenate((raw_direction_1, raw_1[sp1:sp0]), axis=None)
-                else:
-                    raw_1 = [r[1] for r in raws if r[0] == f1].pop()
-                    raw_0 = [r[1] for r in raws if r[0] == f0].pop()
-                    raw_direction_1 = np.concatenate((raw_direction_1, raw_1[sp1:], raw_0[:sp0]), axis=None)
-                    glued_dat_path = os.path.join(destination, 'glued.dat')
-                    with open(glued_dat_path, 'wb') as your_dat_file:
-                        your_dat_file.write(struct.pack('d' * len(raw_direction_1), *raw_direction_1))
+            extract_raw_for_direction(data, raws, destination)
+            extract_raw_for_direction(data[1:], raws, destination)
 
 
 recursive(root_dir, destination=dest)
