@@ -43,7 +43,7 @@ def extract_raw_for_direction(data, raws, destination):
         _, raw = raws[-1]
         _, last_idx, _ = data[-1]
         print(last_idx)
-        raw_direction_1 = np.concatenate((raw_direction_1, raw[last_idx:]), axis=None)
+        raw_direction_1 = np.concatenate((raw_direction_1, raw[int(last_idx):]), axis=None)
     glued_dat_path = os.path.join(destination, dat_name)
     with open(glued_dat_path, 'wb') as your_dat_file:
         your_dat_file.write(struct.pack('d' * len(raw_direction_1), *raw_direction_1))
