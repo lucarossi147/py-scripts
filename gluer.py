@@ -23,19 +23,30 @@ def recursive(path_to_dir_or_file, destination):
     if not os.path.exists(destination):
         os.mkdir(destination)
     files_or_dirs = [os.path.join(path_to_dir_or_file, fod) for fod in os.listdir(path_to_dir_or_file)]
-    for fod in files_or_dirs:
-        if os.path.isdir(fod):
-            print(fod + " is a dir")
-            recursive(fod, destination)
-        elif fod.endswith("Settings.xml"):
-            tree = ET.parse(fod)
-            root = tree.getroot()
-            data = [(rev_pos.attrib['File'], rev_pos.attrib['StartPosition'], rev_pos.attrib['Direction'])
-                    for rev_pos in root.iter("ReversePositionData")]
-            files = {f[0] for f in data}
-            files = list(sorted(files))
-            raws = [(fod.split(os.sep).pop(), open_dat(fod)) for fod in files_or_dirs if
-                    fod.split(os.sep).pop() in files]
+    settings_file = [fod for fod in files_or_dirs if fod.endswith("Settings.xml")]
+    if len(settings_file) == 0:
+        # Folder does NOT have settings.xml
+        # this could be a folder of folders of a folder of files
+        # call recursively this method on all sub_dirs
+        [recursive(fod, destination) for fod in files_or_dirs if os.path.isdir(fod)]
+    # Folder has settings.xml
+    else:
+        # I'm in a folder of files
+        tree = ET.parse(settings_file.pop())
+        root = tree.getroot()
+        data = [(rev_pos.attrib['File'], rev_pos.attrib['StartPosition'], rev_pos.attrib['Direction'])
+                for rev_pos in root.iter("ReversePositionData")]
+        files = {f[0] for f in data}
+        files = list(sorted(files))
+        raws = [(f.split(os.sep).pop(), open_dat(f)) for f in files_or_dirs if
+                f.endswith(".dat") and not f.endswith("MonitorFile.dat")]
+        if len(raws) != len(files):
+            print("NOT all files in settings", current_dir)
+            # not all files are in the settings
+            pass
+        else:
+            # all files are in settings
+            print("all files in settings", current_dir)
             raw_direction_1 = np.array([])
             data_with_direction_1 = [d for d in data if d[2] == '1']
             data_with_direction_0 = [d for d in data if d[2] == '0']
@@ -49,9 +60,9 @@ def recursive(path_to_dir_or_file, destination):
                     raw_1 = [r[1] for r in raws if r[0] == f1].pop()
                     raw_0 = [r[1] for r in raws if r[0] == f0].pop()
                     raw_direction_1 = np.concatenate((raw_direction_1, raw_1[sp1:], raw_0[:sp0]), axis=None)
-            glued_dat_path = os.path.join(destination, 'glued.dat')
-            with open(glued_dat_path, 'wb') as your_dat_file:
-                your_dat_file.write(struct.pack('d' * len(raw_direction_1), *raw_direction_1))
+                    glued_dat_path = os.path.join(destination, 'glued.dat')
+                    with open(glued_dat_path, 'wb') as your_dat_file:
+                        your_dat_file.write(struct.pack('d' * len(raw_direction_1), *raw_direction_1))
 
 
 recursive(root_dir, destination=dest)
