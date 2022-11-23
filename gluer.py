@@ -27,7 +27,6 @@ def recursive(path_to_dir_or_file, destination):
         if os.path.isdir(fod):
             print(fod + " is a dir")
             recursive(fod, destination)
-            return
         elif fod.endswith("Settings.xml"):
             tree = ET.parse(fod)
             root = tree.getroot()
@@ -40,7 +39,7 @@ def recursive(path_to_dir_or_file, destination):
             raw_direction_1 = np.array([])
             data_with_direction_1 = [d for d in data if d[2] == '1']
             data_with_direction_0 = [d for d in data if d[2] == '0']
-            for (f1, sp1, d1), (f0, sp0, d0) in zip(data_with_direction_1, data_with_direction_0):
+            for (f1, sp1, _), (f0, sp0, _) in zip(data_with_direction_1, data_with_direction_0):
                 sp1 = int(sp1)
                 sp0 = int(sp0)
                 if f1 == f0:
