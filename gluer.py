@@ -85,7 +85,7 @@ def recursive(path_to_dir_or_file, destination):
                     glued_raws = np.concatenate((glued_raws, raw), axis=None)
                 f, sp, d = data[0]
                 dat_name, _ = raws[0]
-                dat_name += dat_name.removesuffix(".dat") + "_DIRECTION_" + str(d) + ".dat"
+                dat_name = dat_name.removesuffix(".dat") + "_DIRECTION_" + str(d) + ".dat"
                 glued_dat_path = os.path.join(destination, dat_name)
                 with open(glued_dat_path, 'wb') as your_dat_file:
                     your_dat_file.write(struct.pack('d' * len(glued_raws), *glued_raws))
