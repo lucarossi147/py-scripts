@@ -70,6 +70,7 @@ def detect_events(filepath, file_number, res_folder):
         elif status == COUNTING:
             if smoothed[i] > th[i]:
                 count += 1
+                end_of_event = i
                 if count >= min_event_l:
                     status = EVENT
             else:
@@ -137,7 +138,7 @@ for fta in folders_to_analyze:
         os.mkdir(results_folder)
     else:
         print("Folder already exists")
-    path_of_files_to_check = os.path.join(desktop_folder, "ml_data", "Cultured corona virus_I-t data", fta)
+    path_of_files_to_check = os.path.join(desktop_folder, "glued", "ml_data", "Cultured corona virus_I-t data", fta)
     # all folders containing relevant files to check
     all_folders_inside = os.listdir(path_of_files_to_check)
     for number_folder in all_folders_inside:
