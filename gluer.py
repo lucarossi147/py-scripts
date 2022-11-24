@@ -45,6 +45,9 @@ def extract_raw_for_direction(data, raws, destination):
         _, last_idx, _ = data[-1]
         print(last_idx)
         raw_direction_1 = np.concatenate((raw_direction_1, raw[int(last_idx):]), axis=None)
+    if int(d1) == 0:
+        # if direction is 0 flip the data
+        raw_direction_1 = raw_direction_1 * -1
     glued_dat_path = os.path.join(destination, dat_name)
     with open(glued_dat_path, 'wb') as your_dat_file:
         your_dat_file.write(struct.pack('d' * len(raw_direction_1), *raw_direction_1))
@@ -74,7 +77,9 @@ def recursive(path_to_dir_or_file, destination):
         files = list(sorted(files))
         raws = [(f.split(os.sep).pop(), open_dat(f)) for f in files_or_dirs if
                 f.endswith(".dat") and not f.endswith("MonitorFile.dat")]
-        if len(raws) != len(files):
+        if len(raws) == 0:
+            print("no legal files to read in dir: ", current_dir)
+        elif len(raws) != len(files):
             print("NOT all files in settings", current_dir)
             # not all files are in the settings
             if len(data) == 1 and len(raws) > 0:
@@ -86,6 +91,8 @@ def recursive(path_to_dir_or_file, destination):
                 f, sp, d = data[0]
                 dat_name, _ = raws[0]
                 dat_name = dat_name.removesuffix(".dat") + "_DIRECTION_" + str(d) + ".dat"
+                if int(d) == 0:
+                    glued_raws = glued_raws * -1
                 glued_dat_path = os.path.join(destination, dat_name)
                 with open(glued_dat_path, 'wb') as your_dat_file:
                     your_dat_file.write(struct.pack('d' * len(glued_raws), *glued_raws))
@@ -104,9 +111,16 @@ def recursive(path_to_dir_or_file, destination):
                 print("File only needs to be copied")
                 # nothing to glue
                 f, sp, d = data[0]
-                dat_name, _ = raws[0]
+                dat_name, raw = raws[0]
                 renamed_dat = os.path.join(destination, dat_name.removesuffix(".dat") + "_DIRECTION_" + str(d) + ".dat")
-                shutil.copy(dat_name, renamed_dat)
+                if int(d) == 1:
+                    # only needs to be moved
+                    shutil.copy(dat_name, renamed_dat)
+                else:
+                    # needs to be flipped
+                    raw = raw * - 1
+                    with open(renamed_dat, 'wb') as your_dat_file:
+                        your_dat_file.write(struct.pack('d' * len(raw), *raw))
             print("first run")
             extract_raw_for_direction(data, raws, destination)
             print("second run")
