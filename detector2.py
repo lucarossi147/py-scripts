@@ -58,6 +58,7 @@ def detect_events(filepath, file_number, res_folder):
     begin_of_event = 0
     end_of_event = 0
     poop = False
+    poop_fuck = 0
     print("analyzing")
     for i in range(len(center)):
         if status == NO_EVENT:
@@ -87,6 +88,8 @@ def detect_events(filepath, file_number, res_folder):
             if smoothed[i] > th[i]:
                 end_of_event = i
             if smoothed[i] < m[i] and end_of_event - begin_of_event > min_event_l:
+                if poop_fuck < end_of_event - begin_of_event:
+                    poop_fuck = end_of_event - begin_of_event
                 events.append([begin_of_event, end_of_event])
                 status = NO_EVENT
     print("done, found events are: ", len(events))
