@@ -159,8 +159,8 @@ for fta in folders_to_analyze:
 files = [t[0] for t in tuples_to_analyze]
 results = [t[1] for t in tuples_to_analyze]
 file_numbers = list(range(len(tuples_to_analyze)))
-for f, fn, r in zip(files, file_numbers, results):
-    detect_events(f, fn, r)
-# with ThreadPoolExecutor(max_workers=4) as executor:
-#     executor.map(detect_events, files, file_numbers, results)
+# for f, fn, r in zip(files, file_numbers, results):
+#     detect_events(f, fn, r)
+with ThreadPoolExecutor(max_workers=4) as executor:
+    executor.map(detect_events, files, file_numbers, results)
 print(time.time() - start_time)
