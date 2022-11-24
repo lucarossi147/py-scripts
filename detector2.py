@@ -48,7 +48,7 @@ def detect_events(filepath, file_number, res_folder):
         center - 1 - max_event_length_mono] - cs2[center - 1 - mov_avg_length_mono]) / mov_avg_den - np.power(m, 2)
 
     th = m + 3 * s
-    print(len(center), len(m), len(s), len(th), len(raw))
+    print(len(smoothed), len(center), len(m), len(s), len(th), len(raw))
     min_samples = 3
     NO_EVENT = 0
     COUNTING = 1
@@ -83,7 +83,7 @@ def detect_events(filepath, file_number, res_folder):
             if smoothed[i] > m[i] and end_of_event > begin_of_event:
                 events.append([begin_of_event, end_of_event])
                 status = NO_EVENT
-    print("done")
+    print("done, found events are: ", len(events))
     extracted_events = np.array([])
     corrected_events = []
     if len(events) == 0:
