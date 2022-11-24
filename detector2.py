@@ -57,13 +57,18 @@ def detect_events(filepath, file_number, res_folder):
     events = []
     begin_of_event = 0
     end_of_event = 0
-
+    poop = False
     print("analyzing")
     for i in range(len(center)):
         if status == NO_EVENT:
             if s[i] > max_std:
+                print("troppo rumore")
+                poop = True
                 continue
             if smoothed[i] > th[i]:
+                if poop:
+                    print("Non dovrei essere qui")
+                    poop = False
                 begin_of_event = i
                 count = 1
                 status = COUNTING
@@ -91,11 +96,13 @@ def detect_events(filepath, file_number, res_folder):
         return
     for event in events:
         start, end = event
+        start += mov_avg_length_mono
+        end += mov_avg_length_mono
         ev_range = (end - start) * 2
         start = start - ev_range if start - ev_range > 0 else 0
         end = end + ev_range if end + ev_range < len(raw) - 1 else len(raw) - 1
         corrected_events.append([start, end])
-        extracted_events = np.concatenate((extracted_events, raw[start + mov_avg_length_mono:end + mov_avg_length_mono]), axis=None)
+        extracted_events = np.concatenate((extracted_events, raw[start:end]), axis=None)
 
     f_name = filepath.split(os.sep).pop().removesuffix(".dat")
     folder_name = res_folder + os.sep + f_name
