@@ -40,8 +40,9 @@ def detect_events(filepath, file_number, res_folder):
     cs = np.cumsum(raw)
     cs2 = np.cumsum(np.power(raw, 2))
 
-    center = np.linspace(mov_avg_length_mono + 1, len(raw) - mov_avg_length_mono, len(smoothed))
-    print(center[0:3])
+    center = np.array(range(mov_avg_length_mono + 1, len(raw) - mov_avg_length_mono))
+    # center = np.linspace(mov_avg_length_mono + 1, len(raw) - mov_avg_length_mono, len(smoothed))
+    print(len(smoothed), len(center), len(raw))
     m = (cs[center + mov_avg_length_mono] - cs[center + max_event_length_mono] + cs[
         center - 1 - max_event_length_mono] - cs[center - 1 - mov_avg_length_mono]) / mov_avg_den
     s = (cs2[center + mov_avg_length_mono] - cs2[center + max_event_length_mono] + cs2[
