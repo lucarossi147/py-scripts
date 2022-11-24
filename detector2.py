@@ -41,14 +41,12 @@ def detect_events(filepath, file_number, res_folder):
     cs2 = np.cumsum(np.power(raw, 2))
 
     center = np.array(range(mov_avg_length_mono + 1, len(raw) - mov_avg_length_mono))
-    print(len(smoothed), len(center), len(raw))
     m = (cs[center + mov_avg_length_mono] - cs[center + max_event_length_mono] + cs[
         center - 1 - max_event_length_mono] - cs[center - 1 - mov_avg_length_mono]) / mov_avg_den
     s = np.sqrt((cs2[center + mov_avg_length_mono] - cs2[center + max_event_length_mono] + cs2[
         center - 1 - max_event_length_mono] - cs2[center - 1 - mov_avg_length_mono]) / mov_avg_den - np.power(m, 2))
 
     th = m + 3 * s
-    print(len(smoothed), len(center), len(m), len(s), len(th), len(raw))
     NO_EVENT = 0
     COUNTING = 1
     EVENT = 2
@@ -88,7 +86,6 @@ def detect_events(filepath, file_number, res_folder):
                 events.append([begin_of_event, end_of_event])
                 status = NO_EVENT
     print("done, found events are: ", len(events))
-    print(poop_fuck)
     extracted_events = np.array([])
     corrected_events = []
     if len(events) == 0:
