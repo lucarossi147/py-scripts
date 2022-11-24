@@ -41,7 +41,9 @@ def detect_events(filepath, file_number, res_folder):
     cs2 = np.cumsum(np.power(raw, 2))
 
     center = np.array(range(mov_avg_length_mono + 1, len(raw) - mov_avg_length_mono))
-
+    print(len(center))
+    for i in range(15):
+        print(center[i])
     m = (cs[center + mov_avg_length_mono] - cs[center + max_event_length_mono] + cs[
         center - 1 - max_event_length_mono] - cs[center - 1 - mov_avg_length_mono]) / mov_avg_den
     s = (cs2[center + mov_avg_length_mono] - cs2[center + max_event_length_mono] + cs2[
@@ -79,7 +81,7 @@ def detect_events(filepath, file_number, res_folder):
                 status = NO_EVENT
             if smoothed[i] > th[i]:
                 end_of_event = i
-            if smoothed[i] > m:
+            if smoothed[i] > m and end_of_event > begin_of_event:
                 events.append([begin_of_event, end_of_event])
                 status = NO_EVENT
     print("done")
