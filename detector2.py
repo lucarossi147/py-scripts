@@ -76,7 +76,7 @@ def detect_events(filepath, file_number, res_folder):
             else:
                 status = NO_EVENT
         elif status == EVENT:
-            if count > max_event_length:
+            if end_of_event - begin_of_event > max_event_length:
                 status = NO_EVENT
                 continue
             if smoothed[i] > th[i]:
