@@ -41,12 +41,11 @@ def detect_events(filepath, file_number, res_folder):
     cs2 = np.cumsum(np.power(raw, 2))
 
     center = np.array(range(mov_avg_length_mono + 1, len(raw) - mov_avg_length_mono))
-    # center = np.linspace(mov_avg_length_mono + 1, len(raw) - mov_avg_length_mono, len(smoothed))
     print(len(smoothed), len(center), len(raw))
     m = (cs[center + mov_avg_length_mono] - cs[center + max_event_length_mono] + cs[
         center - 1 - max_event_length_mono] - cs[center - 1 - mov_avg_length_mono]) / mov_avg_den
-    s = (cs2[center + mov_avg_length_mono] - cs2[center + max_event_length_mono] + cs2[
-        center - 1 - max_event_length_mono] - cs2[center - 1 - mov_avg_length_mono]) / mov_avg_den - np.power(m, 2)
+    s = np.sqrt((cs2[center + mov_avg_length_mono] - cs2[center + max_event_length_mono] + cs2[
+        center - 1 - max_event_length_mono] - cs2[center - 1 - mov_avg_length_mono]) / mov_avg_den - np.power(m, 2))
 
     th = m + 3 * s
     print(len(smoothed), len(center), len(m), len(s), len(th), len(raw))
@@ -58,19 +57,13 @@ def detect_events(filepath, file_number, res_folder):
     events = []
     begin_of_event = 0
     end_of_event = 0
-    poop = False
     poop_fuck = 0
     print("analyzing")
     for i in range(len(center)):
         if status == NO_EVENT:
             if s[i] > max_std:
-                print("troppo rumore")
-                poop = True
                 continue
             if smoothed[i] > th[i]:
-                if poop:
-                    print("Non dovrei essere qui")
-                    poop = False
                 begin_of_event = i
                 count = 1
                 status = COUNTING
