@@ -93,6 +93,7 @@ def detect_events(filepath, file_number, res_folder):
                 events.append([begin_of_event, end_of_event])
                 status = NO_EVENT
     print("done, found events are: ", len(events))
+    print(poop_fuck)
     extracted_events = np.array([])
     corrected_events = []
     if len(events) == 0:
