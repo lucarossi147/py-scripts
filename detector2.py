@@ -36,7 +36,7 @@ def detect_events(filepath, file_number, res_folder):
     b = [1 / 3, 1 / 3, 1 / 3]
     a = 1
     smoothed = signal.filtfilt(b, a, raw)
-    smoothed = smoothed[mov_avg_length_mono:len(smoothed) - mov_avg_length_mono]
+    smoothed = smoothed[mov_avg_length_mono + 1:len(smoothed) - mov_avg_length_mono]
     cs = np.cumsum(raw)
     cs2 = np.cumsum(np.power(raw, 2))
 
