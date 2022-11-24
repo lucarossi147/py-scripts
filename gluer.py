@@ -121,10 +121,11 @@ def recursive(path_to_dir_or_file, destination):
                     raw = raw * - 1
                     with open(renamed_dat, 'wb') as your_dat_file:
                         your_dat_file.write(struct.pack('d' * len(raw), *raw))
-            print("first run")
-            extract_raw_for_direction(data, raws, destination)
-            print("second run")
-            extract_raw_for_direction(data[1:], raws, destination)
+            else:
+                print("first run")
+                extract_raw_for_direction(data, raws, destination)
+                print("second run")
+                extract_raw_for_direction(data[1:], raws, destination)
 
 
 recursive(root_dir, destination=dest)
