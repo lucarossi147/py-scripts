@@ -7,7 +7,7 @@ import os
 
 def extract_lengths(filename):
     with open(filename) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter='')
+        csv_reader = csv.reader(csv_file, delimiter=',')
         line_count = 0
         event_positions = []
         for row in csv_reader:
@@ -37,5 +37,6 @@ def plot_stuff(dat_file, csv_file):
     plt.show()
 
 
-root_dir = os.path.join("C:\\", "Users", "Luca Rossi", "Desktop", "RESULTS", "HCoV-229E", )
-plot_stuff(os.path.join(root_dir, "ALTRO.csv"), os.path.join(root_dir, "details.csv"))
+root_dir = os.path.join("C:\\", "Users", "Luca Rossi", "Desktop", "RESULTS", "HCoV-229E", "20200622154659",
+                        "NK-2-1-1st-FIL_001_DIRECTION_0")
+plot_stuff(os.path.join(root_dir, "NK-2-1-1st-FIL_001_DIRECTION_0.dat"), os.path.join(root_dir, "details.csv"))
