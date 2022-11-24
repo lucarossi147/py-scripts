@@ -77,9 +77,10 @@ def detect_events(filepath, file_number, res_folder):
         elif status == EVENT:
             if count > max_event_length:
                 status = NO_EVENT
+                continue
             if smoothed[i] > th[i]:
                 end_of_event = i
-            if smoothed[i] > m[i] and end_of_event > begin_of_event:
+            if smoothed[i] < m[i] and end_of_event > begin_of_event:
                 events.append([begin_of_event, end_of_event])
                 status = NO_EVENT
     print("done, found events are: ", len(events))
