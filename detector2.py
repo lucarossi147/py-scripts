@@ -49,7 +49,6 @@ def detect_events(filepath, file_number, res_folder):
 
     th = m + 3 * s
     print(len(smoothed), len(center), len(m), len(s), len(th), len(raw))
-    min_samples = 3
     NO_EVENT = 0
     COUNTING = 1
     EVENT = 2
@@ -71,7 +70,7 @@ def detect_events(filepath, file_number, res_folder):
         elif status == COUNTING:
             if smoothed[i] > th[i]:
                 count += 1
-                if count >= min_samples:
+                if count >= min_event_l:
                     status = EVENT
             else:
                 status = NO_EVENT
