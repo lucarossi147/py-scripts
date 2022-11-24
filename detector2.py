@@ -60,7 +60,7 @@ def detect_events(filepath, file_number, res_folder):
     end_of_event = 0
 
     print("analyzing")
-    for i in center:
+    for i in range(len(center)):
         if status == NO_EVENT:
             if s[i] > max_std:
                 continue
