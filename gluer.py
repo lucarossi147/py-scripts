@@ -55,7 +55,7 @@ def merge_data_in_same_file(list_of_data_with_direction_change, raw):
         if last_direction == 0:
             raw_segment *= -1
         last_start_position = current_start_position
-        last_direction = last_direction
+        last_direction = current_direction
         raw_to_return = np.concatenate((raw_to_return, raw_segment), axis=None)
     last_part = raw[last_start_position:]
     if last_direction == 0:
