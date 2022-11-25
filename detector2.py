@@ -33,25 +33,38 @@ def detect_events(filepath, file_number, res_folder):
     max_event_length = max_event_length_mono * 2 + 1
     max_std = 0.2e-9
     mov_avg_den = mov_avg_length - max_event_length
+    min_noise_ratio = 2
     b = [1 / 3, 1 / 3, 1 / 3]
     a = 1
+    sr = 250000
+    blf, alf = signal.butter(4, 1000 / (sr / 2), 'low')
     smoothed = signal.filtfilt(b, a, raw)
     smoothed = smoothed[mov_avg_length_mono + 1:len(smoothed) - mov_avg_length_mono]
+    low_freqs_data = signal.filtfilt(blf, alf, raw)
     cs = np.cumsum(raw)
     cs2 = np.cumsum(np.power(raw, 2))
-
+    # cumsum low freqs
+    cslf = np.cumsum(low_freqs_data)
+    cs2lf = np.cumsum(np.power(low_freqs_data, 2))
     center = np.array(range(mov_avg_length_mono + 1, len(raw) - mov_avg_length_mono))
     m = (cs[center + mov_avg_length_mono] - cs[center + max_event_length_mono] + cs[
         center - 1 - max_event_length_mono] - cs[center - 1 - mov_avg_length_mono]) / mov_avg_den
     s = np.sqrt((cs2[center + mov_avg_length_mono] - cs2[center + max_event_length_mono] + cs2[
         center - 1 - max_event_length_mono] - cs2[center - 1 - mov_avg_length_mono]) / mov_avg_den - np.power(m, 2))
 
+    mlf = (cslf[center + mov_avg_length_mono] - cslf[center + max_event_length_mono] + cslf[
+        center - 1 - max_event_length_mono] - cslf[center - 1 - mov_avg_length_mono]) / mov_avg_den
+    slf = np.sqrt((cs2lf[center + mov_avg_length_mono] - cs2lf[center + max_event_length_mono] + cs2lf[
+        center - 1 - max_event_length_mono] - cs2lf[center - 1 - mov_avg_length_mono]) / mov_avg_den - np.power(mlf, 2))
+    noise_ratio = s / slf
     th = m + 3 * s
     NO_EVENT = 0
     COUNTING = 1
     EVENT = 2
+    NOISE = 3
     status = NO_EVENT
     count = 0
+    noise_count = 0
     events = []
     begin_of_event = 0
     end_of_event = 0
@@ -59,6 +72,13 @@ def detect_events(filepath, file_number, res_folder):
     print("analyzing")
     for i in range(len(center)):
         if status == NO_EVENT:
+            if noise_ratio(i) < min_noise_ratio:
+                noise_count += 1
+            else:
+                noise_count = 0
+            if noise_count > mov_avg_length_mono:
+                status = NOISE
+                continue
             if s[i] > max_std:
                 continue
             if smoothed[i] > th[i]:
@@ -85,6 +105,10 @@ def detect_events(filepath, file_number, res_folder):
                     poop_fuck = end_of_event - begin_of_event
                 events.append([begin_of_event, end_of_event])
                 status = NO_EVENT
+        elif status == NOISE:
+            if noise_ratio[i] > min_noise_ratio:
+                status = NO_EVENT
+                noise_count = 0
     print("done, found events are: ", len(events))
     extracted_events = np.array([])
     corrected_events = []
