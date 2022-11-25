@@ -124,13 +124,9 @@ def detect_events(filepath, file_number, res_folder):
         corrected_events.append([start, end])
         extracted_events = np.concatenate((extracted_events, raw[start:end]), axis=None)
 
-    f_name = filepath.split(os.sep).pop().removesuffix(".dat")
-    folder_name = res_folder + os.sep + f_name
-    if not os.path.exists(folder_name):
-        os.mkdir(folder_name)
-    extracted_dat_name = f_name + ".dat"
-    dat_path = folder_name + os.sep + extracted_dat_name
-    details_path = folder_name + os.sep + "details.csv"
+    f_name = filepath.split(os.sep).pop()
+    dat_path = os.path.join(res_folder, f_name)
+    details_path = os.path.join(res_folder, "details.csv")
     with open(dat_path, 'wb') as your_dat_file:
         your_dat_file.write(struct.pack('d' * len(extracted_events), *extracted_events))
     with open(details_path, 'w', newline="") as f:
