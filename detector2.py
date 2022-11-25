@@ -72,7 +72,7 @@ def detect_events(filepath, file_number, res_folder):
     print("analyzing")
     for i in range(len(center)):
         if status == NO_EVENT:
-            if noise_ratio(i) < min_noise_ratio:
+            if noise_ratio[i] < min_noise_ratio:
                 noise_count += 1
             else:
                 noise_count = 0
