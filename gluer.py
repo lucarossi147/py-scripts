@@ -23,9 +23,8 @@ def improved_extraction(data, raws, destination):
     files_from_data = list(sorted(files_from_data))
 
     raw_direction_1 = np.array([])
-    f_name, start_position, direction = files_from_data.pop(0)
+    f_name = files_from_data.pop(0)
     # controllare sempre che ci sia un elemento prima di poppare
-
     list_of_data_with_direction_change = []
     for f in files_from_data:
         data_with_direction_change = [d for d in data if d[0] == f]
