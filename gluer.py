@@ -23,13 +23,13 @@ def improved_extraction(data, raws, destination):
     files_from_data = list(sorted(files_from_data))
 
     raw_direction_1 = np.array([])
-    f_name = files_from_data.pop(0)
     # controllare sempre che ci sia un elemento prima di poppare
     list_of_data_with_direction_change = []
     for f in files_from_data:
         data_with_direction_change = [d for d in data if d[0] == f]
         list_of_data_with_direction_change.append(data_with_direction_change)
     last_direction = 0
+    f_name = files_from_data.pop(0)
     for f, r in raws:
         if f == f_name:
             raw_of_first_file, direction = merge_data_in_same_file(list_of_data_with_direction_change.pop(0), r)
