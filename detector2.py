@@ -19,9 +19,9 @@ def detect_events(filepath, file_number, res_folder):
     if file_number is not None:
         print("File number: " + str(file_number))
     if res_folder is not None:
-        print("Results will be saved in " + res_folder)
+        # print("Results will be saved in " + res_folder)
         if not os.path.exists(res_folder):
-            print("Creating folder")
+            # print("Creating folder")
             os.mkdir(res_folder)
 
     raw = open_dat(filename=filepath)
@@ -137,10 +137,10 @@ if not os.path.exists(results_folder_base):
 for fta in folders_to_analyze:
     results_folder = os.path.join(results_folder_base, fta)
     if not os.path.exists(results_folder):
-        print("Creating results folder")
+        # print("Creating results folder")
         os.mkdir(results_folder)
-    else:
-        print("Folder already exists")
+    # else:
+    #     print("Folder already exists")
     path_of_files_to_check = os.path.join(desktop_folder, "glued", "ml_data", "Cultured corona virus_I-t data", fta)
     # all folders containing relevant files to check
     all_folders_inside = os.listdir(path_of_files_to_check)
@@ -156,8 +156,9 @@ for fta in folders_to_analyze:
 files = [t[0] for t in tuples_to_analyze]
 results = [t[1] for t in tuples_to_analyze]
 file_numbers = list(range(len(tuples_to_analyze)))
+print("Files to analyze: ", len(files))
 # for f, fn, r in zip(files, file_numbers, results):
 #     detect_events(f, fn, r)
-with ThreadPoolExecutor(max_workers=4) as executor:
+with ThreadPoolExecutor(max_workers=2) as executor:
     executor.map(detect_events, files, file_numbers, results)
 print(time.time() - start_time)
