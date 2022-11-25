@@ -31,7 +31,8 @@ def improved_extraction(data, raws, destination):
     f_name = files_from_data.pop(0)
     for f, r in raws:
         if f == f_name:
-            raw_of_first_file, direction = merge_data_in_same_file(list_of_data_with_direction_change.pop(0), r)
+            raw_of_first_file, direction = merge_data_in_same_file(list_of_data_with_direction_change.pop(0), r,
+                                                                   last_direction)
             last_direction = direction
             raw_direction_1 = np.concatenate((raw_direction_1, raw_of_first_file), axis=None)
             if len(files_from_data) > 0:
@@ -46,21 +47,25 @@ def improved_extraction(data, raws, destination):
         your_dat_file.write(struct.pack('d' * len(raw_direction_1), *raw_direction_1))
 
 
-def merge_data_in_same_file(list_of_data_with_direction_change, raw):
+def merge_data_in_same_file(list_of_data_with_direction_change, raw, direction):
     raw_to_return = np.array([])
     _, last_start_position, last_direction = list_of_data_with_direction_change.pop(0)
+    first_part = raw[:last_start_position]
+    raw_to_return = adjust_and_concat(raw_to_return, first_part, direction)
     for _, current_start_position, current_direction in list_of_data_with_direction_change:
         raw_segment = raw[last_start_position: current_start_position]
-        if last_direction == 0:
-            raw_segment *= -1
+        raw_to_return = adjust_and_concat(raw_to_return, raw_segment, last_direction)
         last_start_position = current_start_position
         last_direction = current_direction
-        raw_to_return = np.concatenate((raw_to_return, raw_segment), axis=None)
     last_part = raw[last_start_position:]
-    if last_direction == 0:
-        last_part *= -1
-    raw_to_return = np.concatenate((raw_to_return, last_part), axis=None)
+    raw_to_return = adjust_and_concat(raw_to_return, last_part, last_direction)
     return raw_to_return, last_direction
+
+
+def adjust_and_concat(base_raw, raw_to_concat, direction):
+    if direction == 0:
+        raw_to_concat *= -1
+    return np.concatenate((base_raw, raw_to_concat), axis=None)
 
 
 def recursive(path_to_dir_or_file, destination):
